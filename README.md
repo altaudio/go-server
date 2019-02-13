@@ -16,8 +16,9 @@
 - Run `realize start`
 
 ## Examples
-### Basic Server with Static Folder
+### [Basic Server with Static Folder](https://gowebexamples.com/http-server/)
 ```
+// app.go
 package main
 
 import (
@@ -43,8 +44,9 @@ func main() {
 }
 ```
 
-### Gorilla Mux Router Example
+### [Gorilla Mux Router Example](https://gowebexamples.com/routes-using-gorilla-mux/)
 ```
+// app.go
 package main
 
 import (
@@ -87,4 +89,71 @@ func main() {
 	fmt.Printf("Server listening on port%s", port)
 	http.ListenAndServe(port, router)
 }
+```
+### [Templates Example](https://gowebexamples.com/templates/)
+```
+// app.go
+
+package main
+
+import (
+	"fmt"
+	"html/template"
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
+)
+
+type Todo struct {
+	Title string
+	Done  bool
+}
+
+type TodoPageData struct {
+	PageTitle string
+	Todos     []Todo
+}
+
+func main() {
+	port := ":8080"
+	router := mux.NewRouter()
+
+	data := TodoPageData{
+		PageTitle: "Todo List",
+		Todos: []Todo{
+			{Title: "Task 1", Done: false},
+			{Title: "Task 2", Done: true},
+			{Title: "Task 3", Done: true},
+		},
+	}
+
+	template, error := template.ParseFiles("template.html")
+
+	if error != nil {
+		log.Fatal(error)
+	}
+
+	router.HandleFunc("/", func(responseWriter http.ResponseWriter, request *http.Request) {
+		template.Execute(responseWriter, data)
+	})
+
+	fmt.Printf("Server listening on port%s", port)
+	http.ListenAndServe(port, router)
+}
+
+```
+```
+// template.html
+
+<h1>{{.PageTitle}}<h1>
+<ul>
+    {{range .Todos}}
+        {{if .Done}}
+            <li class="done">{{.Title}}</li>
+        {{else}}
+            <li>{{.Title}}</li>
+        {{end}}
+    {{end}}
+</ul>
 ```

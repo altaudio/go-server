@@ -2,39 +2,44 @@ package main
 
 import (
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
+type Todo struct {
+	Title string
+	Done  bool
+}
+
+type TodoPageData struct {
+	PageTitle string
+	Todos     []Todo
+}
+
 func main() {
 	port := ":8080"
 	router := mux.NewRouter()
 
-	// Example of getting the URL segments
-	router.HandleFunc("/books/{title}/page/{page}", func(responseWriter http.ResponseWriter, request *http.Request) {
-		vars := mux.Vars(request)
-		title := vars["title"]
-		page := vars["page"]
+	data := TodoPageData{
+		PageTitle: "Todo List",
+		Todos: []Todo{
+			{Title: "Task 1", Done: false},
+			{Title: "Task 2", Done: true},
+			{Title: "Task 3", Done: true},
+		},
+	}
 
-		fmt.Fprintf(responseWriter, "You've requested the book %s at page %s", title, page)
-	})
+	template, error := template.ParseFiles("template.html")
 
-	// Example of restricting request handlers to HTTP methods
-	router.HandleFunc("/books", func(responseWriter http.ResponseWriter, request *http.Request) {
-		fmt.Fprint(responseWriter, "POST /books Response")
-	}).Methods("POST")
+	if error != nil {
+		log.Fatal(error)
+	}
 
-	// Subrouter Example
-	magazineRouter := router.PathPrefix("/magazines").Subrouter()
-	magazineRouter.HandleFunc("/", func(responseWriter http.ResponseWriter, request *http.Request) {
-		fmt.Fprint(responseWriter, "GET /magazines Response")
-	})
-	magazineRouter.HandleFunc("/{title}", func(responseWriter http.ResponseWriter, request *http.Request) {
-		vars := mux.Vars(request)
-		title := vars["title"]
-
-		fmt.Fprintf(responseWriter, "GET /magazines title: %s", title)
+	router.HandleFunc("/", func(responseWriter http.ResponseWriter, request *http.Request) {
+		template.Execute(responseWriter, data)
 	})
 
 	fmt.Printf("Server listening on port%s", port)
