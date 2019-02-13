@@ -9,28 +9,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type Todo struct {
-	Title string
-	Done  bool
-}
-
-type TodoPageData struct {
-	PageTitle string
-	Todos     []Todo
-}
-
 func main() {
 	port := ":8080"
 	router := mux.NewRouter()
-
-	data := TodoPageData{
-		PageTitle: "Todo List",
-		Todos: []Todo{
-			{Title: "Task 1", Done: false},
-			{Title: "Task 2", Done: true},
-			{Title: "Task 3", Done: true},
-		},
-	}
 
 	template, error := template.ParseFiles("template.html")
 
@@ -39,7 +20,11 @@ func main() {
 	}
 
 	router.HandleFunc("/", func(responseWriter http.ResponseWriter, request *http.Request) {
-		template.Execute(responseWriter, data)
+		template.Execute(responseWriter, struct{ LinkClicked bool }{false})
+	})
+
+	router.HandleFunc("/click", func(responseWriter http.ResponseWriter, request *http.Request) {
+		template.Execute(responseWriter, struct{ LinkClicked bool }{true})
 	})
 
 	fmt.Printf("Server listening on port%s", port)

@@ -1,10 +1,5 @@
-<h1>{{.PageTitle}}<h1>
-<ul>
-    {{range .Todos}}
-        {{if .Done}}
-            <li class="done">{{.Title}}</li>
-        {{else}}
-            <li>{{.Title}}</li>
-        {{end}}
-    {{end}}
-</ul>
+{{if .LinkClicked}}
+	<h1>Link Clicked</h1>
+{{else}}
+    <a href="/click">Click Me</a>
+{{end}}
