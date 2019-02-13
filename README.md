@@ -8,15 +8,14 @@
 - [Go Docs](https://golang.org/doc/)
 
 ## Setup
-
 - [Install Go](https://golang.org/doc/install)
 - To get global go packages working add `export PATH=$HOME/go/bin:$PATH` to `~/.bash_profile`
 - `go get github.com/oxequa/realize`
 
 ## Development
-
 - Run `realize start`
 
+##Examples
 ### Basic Server with Static Folder
 ```
 package main
