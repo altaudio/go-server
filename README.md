@@ -5,6 +5,7 @@
 - [Go Web Examples](https://gowebexamples.com)
 - [Gorilla Mux Docs](https://github.com/gorilla/mux)
 - [Realize](https://github.com/oxequa/realize)
+- [Build a web application with Go](https://astaxie.gitbooks.io/build-web-application-with-golang/en/01.0.html)
 - [Go Docs](https://golang.org/doc/)
 
 ## Setup
